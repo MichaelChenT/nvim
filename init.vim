@@ -32,7 +32,7 @@ endif
 let &t_ut=''
 set autochdir
 
-
+syntax on
 " ===
 " === Editor behavior
 " ===
@@ -56,7 +56,7 @@ set indentexpr=
 set foldmethod=indent
 set foldlevel=99
 set foldenable
-set formatoptions-=tc
+set formatoptions=tcrqn
 set splitright
 set splitbelow
 set noshowmode
@@ -69,6 +69,10 @@ set inccommand=split
 set ttyfast "should make scrolling faster
 set lazyredraw "same as above
 set visualbell
+
+"Get out of VI's compatible mode
+set nocompatible
+
 silent !mkdir -p ~/.config/nvim/tmp/backup
 silent !mkdir -p ~/.config/nvim/tmp/undo
 set backupdir=~/.config/nvim/tmp/backup,.
@@ -343,6 +347,9 @@ Plug 'honza/vim-snippets'
 " Undo Tree
 Plug 'mbbill/undotree'
 
+
+
+
 " Git
 Plug 'theniceboy/vim-gitignore', { 'for': ['gitignore', 'vim-plug'] }
 Plug 'fszymanski/fzf-gitignore', { 'do': ':UpdateRemotePlugins' }
@@ -368,6 +375,13 @@ Plug 'jelera/vim-javascript-syntax'
 
 " Go
 Plug 'fatih/vim-go' " , { 'do': ':GoUpdateBinaries' }
+
+" molokai
+Plug 'tomasr/molokai'
+set background=dark
+set t_Co=256
+let g:rehash256 = 1
+colorscheme molokai
 
 " Python
 Plug 'tmhedberg/SimpylFold'
@@ -515,18 +529,16 @@ nnoremap <LEADER>g= :GitGutterNextHunk<CR>
 " == NERDTree-git
 " ==
 let g:NERDTreeIndicatorMapCustom = {
-			\ "Modified"	: "✹",
-			\ "Staged"		: "✚",
-			\ "Untracked" : "✭",
-			\ "Renamed"	 : "➜",
-			\ "Unmerged"	: "═",
-			\ "Deleted"	 : "✖",
-			\ "Dirty"		 : "✗",
-			\ "Clean"		 : "✔︎",
-			\ "Unknown"	 : "?"
-			\ }
-
-
+    \ "Modified"  : "✹",
+    \ "Staged"    : "✚",
+    \ "Untracked" : "✭",
+    \ "Renamed"   : "➜",
+    \ "Unmerged"  : "═",
+    \ "Deleted"   : "✖",
+    \ "Dirty"     : "✗",
+    \ "Clean"     : "✔︎",
+    \ "Unknown"   : "?"
+    \ }
 " ===
 " === coc
 " ===
