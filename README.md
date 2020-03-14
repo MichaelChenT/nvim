@@ -6,6 +6,16 @@
 
 Please **DO NOT** just copy this config without really looking at it! Please, at least, read this README file!
 
+## Startup System Enviorment
+- [  ] brew install zsh
+- [  ] brew install tmux
+- [  ] brew install fzf
+- [  ] brew install bat
+- [  ] brew install ripgrep 
+- [  ] brew install fd
+
+
+
 ## After Installation, You Need To:
 
 - [ ] Install `pynvim` (pip)
