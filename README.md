@@ -8,6 +8,7 @@ Please **DO NOT** just copy this config without really looking at it! Please, at
 
 ## Startup System Enviorment
 - [  ] brew install zsh
+- [  ] brew install zsh
 - [  ] brew install tmux
 - [  ] brew install fzf
 - [  ] brew install bat
@@ -15,6 +16,197 @@ Please **DO NOT** just copy this config without really looking at it! Please, at
 - [  ] brew install fd
 
 
+oh-my-zsh
+tmux
+neovim
+fzf
+ripgrep
+bat
+以及用来录屏的神器asciinema
+
+#### 安装brew
+```
+git clone git://mirrors.ustc.edu.cn/homebrew-core.git//usr/local/Homebrew/Library/Taps/homebrew/homebrew-core --depth=1
+```
+#### 安装brew cask
+```
+git clone git://mirrors.ustc.edu.cn/homebrew-cask.git//usr/local/Homebrew/Library/Taps/homebrew/homebrew-cask --depth=1
+```
+#### 替换国内源
+```
+cd "$(brew --repo)"
+git remote set-url origin https://mirrors.ustc.edu.cn/brew.git
+cd "$(brew --repo)/Library/Taps/homebrew/homebrew-core"
+git remote set-url origin https://mirrors.ustc.edu.cn/homebrew-core.git
+cd "$(brew --repo)/Library/Taps/homebrew/homebrew-cask"
+git remote set-url origin https://mirrors.ustc.edu.cn/homebrew-cask.git：；
+```
+
+
+我假设你已经有了iTerm2这样的终端软件，安装好了zsh（Mac OS上已自带），如果没有，通常也是一条命令如apt install zsh或者yum install zsh就可以搞定。
+
+oh-my-zsh
+大名鼎鼎的oh-my-zsh是一个高度定制化、插件化的zsh配置，几乎是zsh的标配，安装非常方便。
+```
+sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+```
+安装好之后就可以通过~/.zshrc配置文件来设置theme、plugins了。
+
+autosuggestion
+autosuggestion是zsh的一个插件，利用它，可以让你在终端输入命令的时候，自动给出建议，相当高效（酷炫）。
+```
+git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+```
+然后将zsh-autosuggestions添加到~/.zshrc的plugins里面。
+cp -r ~/workspace/dingxiang/practice/nvim/zshrc ~/.zshrc
+
+syntax-highlight
+syntax-highlight是另一个很有用的zsh插件，有了它，你在输入命令的时候如果有拼写错了，马上就能发现。
+```
+git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+```
+然后将zsh-syntax-highlighting加入~/.zshrc的plugins里面。
+
+interactive-cd
+interactive-cd依赖后面会提到的fzf工具，它的安装很简单，只要把对应的zsh下载到oh-my-zsh的custom目录即可。
+```
+curl https://raw.githubusercontent.com/changyuheng/zsh-interactive-cd/master/zsh-interactive-cd.plugin.zsh -o ~/.oh-my-zsh/custom/zsh-interactive-cd.plugin.zsh
+```
+tmux
+tmux是一个终端分屏神奇，尤其是对于那种需要在远程机器上开发调试的人来说，它简直是一个福音。当然，即便在本地笔记本上，它的分屏功能也是非常的实用。
+
+通过软件包管理器安装即可，如Mac OS上执行brew install tmux。 安装完成之后，在终端执行tmux，就会开启一个session，你可以执行Ctrl+D从这个session detatch出来，然后再用tmux a -t [session] attach进去，另外你可以把一个终端分成多个window，再分成多个pane。
+简约而不简单的fzf
+fzf真乃神器，用上它之后，你会马上把什么CtrlP之流抛诸脑后，因为它太方便了。
+```
+ssh-keygen -t rsa
+cat ~/.ssh/id_rsa.pub
+git clone https://github.com/JiaBaoChenT/nvim.git
+cp ~/workspace/dingxiang/practice/nvim/tmux/tmux.conf ~/.tmux
+```
+
+大部分系统的软件源里都已经带了这个软件，由于它是golang编写的，安装非常方便，在mac上通过brew install fzf即可安装。
+
+然后执行$(brew --prefix)/opt/fzf/install将其ä¸zsh集成。
+
+如果想在vim中使用，还需要加入下面几行（假设你使用vim-plug管理插件）：
+
+Plug '/usr/local/opt/fzf'
+Plug 'junegunn/fzf.vim'
+
+" ...
+
+command! -bang -nargs=* Rg call fzf#vim#grep("rg --column --line-number --no-heading --color=always --smart-case ".shellescape(<q-args>), 1, {'options': '--delimiter : --nth 4..'}, <bang>0)
+nmap <C-p> :Files<CR>
+nmap <C-e> :Buffers<CR>
+nmap <C-g> :Rg<CR>
+利用bat提升preview效果
+为了提升使用体验，通常我们会对fzf做一些配置，比如用fd替换find等等。 另外，大家可能对上面视频中的交互式git操作印象深刻，它其实利用了fzf的preview功能和bat工具。
+
+bat是一个rust编写的cat命令的替代品，相比cat，它支持：
+
+根据文件类型进行highlight
+显示行号
+像less命令一样上下翻页
+brew install bat安装bat，然后将下面两行加入到~/.zshrc中。
+
+export FZF_DEFAULT_COMMAND="fd --exclude={.git,.idea,.vscode,pkg,node_modules,vendor,bin,build} -H --type f"
+export FZF_DEFAULT_OPTS="--height 40% --layout=reverse --bind up:preview-up,down:preview-down --preview '(bat --style=numbers --color=always {} || cat {}) 2> /dev/null | head -500'"
+git集成fzf
+当git和拥有preview window的fzf集成在一起的时候，世界一下子变得那么美好，我们可以在交互式的界面查看git提交记录，在preview window查看详细的diff信息，交互式的切换branch等等。
+
+你只需要在~/.oh-my-zsh/custom下面创建一个名为fzf-git.zsh的文件，写上你的配置即可。fzf的wiki上有了一份非常棒的配置，我简单修改了一下，避免了和git的zsh插件的函数重名，以及和tmux的按键冲突，内容如下：
+```
+# GIT heart FZF
+# -------------
+
+is_in_git_repo() {
+  git rev-parse HEAD > /dev/null 2>&1
+}
+
+fzf-down() {
+  fzf --height 50% "$@" --border
+}
+
+gf_() {
+  is_in_git_repo || return
+  git -c color.status=always status --short |
+  fzf-down -m --ansi --nth 2..,.. \
+    --preview '(git diff --color=always -- {-1} | sed 1,4d; bat --color=always {-1}) | head -500' |
+  cut -c4- | sed 's/.* -> //'
+}
+
+gv_() {
+  is_in_git_repo || return
+  git branch -a --color=always | rg -v '/HEAD\s' | sort |
+  fzf-down --ansi --multi --tac --preview-window right:70% \
+    --preview 'git log --oneline --graph --date=short --color=always --pretty="format:%C(auto)%cd %h%d %s" $(sed s/^..// <<< {} | cut -d" " -f1) | head -'$LINES |
+  sed 's/^..//' | cut -d' ' -f1 |
+  sed 's#^remotes/##'
+}
+
+gt_() {
+  is_in_git_repo || return
+  git tag --sort -version:refname |
+  fzf-down --multi --preview-window right:70% \
+    --preview 'git show --color=always {} | head -'$LINES
+}
+
+gg_() {
+  is_in_git_repo || return
+  git log --date=short --format="%C(green)%C(bold)%cd %C(auto)%h%d %s (%an)" --graph --color=always |
+  fzf-down --ansi --no-sort --reverse --multi --bind 'ctrl-s:toggle-sort' \
+    --header 'Press CTRL-S to toggle sort' \
+    --preview 'rg -o "\x1b\[m\x1b\[33m[a-f0-9]{7,}" <<< {} | xargs git show --color=always | head -'$LINES |
+  rg -w -o "[a-f0-9]{7,}"
+}
+
+gr_() {
+  is_in_git_repo || return
+  git remote -v | awk '{print $1 "\t" $2}' | uniq |
+  fzf-down --tac \
+    --preview 'git log --oneline --graph --date=short --pretty="format:%C(auto)%cd %h%d %s" {1} | head -200' |
+  cut -d$'\t' -f1
+}
+
+join-lines() {
+  local item
+  while read item; do
+    echo -n "${(q)item} "
+  done
+}
+
+bind-git-helper() {
+  local c
+  for c in $@; do
+    eval "fzf-g$c-widget() { local result=\$(g${c}_ | join-lines); zle reset-prompt; LBUFFER+=\$result }"
+    eval "zle -N fzf-g$c-widget"
+    eval "bindkey '^g^$c' fzf-g$c-widget"
+  done
+}
+bind-git-helper f v t r g
+unset -f bind-git-helper
+```
+
+在一个git管理的项目里试一下：Ctrl+g Ctrl+f，Ctrl+g Ctrl+v，Ctrl+g Ctrl+t，Ctrl+g Ctrl+r，Ctrl+g Ctrl+g，看看会出现什么吧。 fzf是支持多选的，在选择窗口试着按下[Tab]看看。
+
+集成ripgrep查找内容
+ripgrep是一个grep的替代品，它由rust编写比grep性能更高，使用更方便。
+
+通过brew install ripgrep安装。 最简单的使用只需要在要æ¥找的目录下执行rg searchtext，它会自动在当前目录下进行递归查找，并自动跳过.gitignore里面的内容。
+
+我需要的唯一的一个编辑器neovim
+vim/neovim作为我主要的编辑器已经有超过十年的时间了，可能接下来的十年，它仍然是我的主力编辑器，无论是编写代码还是文档，它都足以胜任，并常有惊喜。我用vim编写markdown博客、robotframework case、Python程序、Go、ReactJS写前端等等等等。
+
+在我看来，它的优点有下面这些：
+
+不同于Vs Code、sublime这类图形化的编辑器，vim/neovim在几乎所有的linux发行版上都有，无论在哪个机器上，只要有vim，获取一份配置文件，马上就拥有一个你熟悉的开发环境，那是非常美妙的事情。
+快捷键简单、并且专注于编辑器的事情，扩展性非常好，像neovim，你完全可以把它作为一个编辑器内核，在上面创造出一个完整的IDE出来。
+只需要一个配置文件，简单æ¸晰。
+拥有类似vim-plug这样的插件管理器，和众多的插件贡献者，像vim-go这类插件质量很高。
+但同时，如果你经常需要进行单步调试、观察变量这样的事情，那它就不那么合适了，这个时候还是专门的IDE更方便。对我而言，如果工作的方向偏服务端，且有较为完善的单测覆盖，有较好的日志保证，需要调试的情形是极少，甚至可以忽略的。
+
+如果你有兴趣尝试一下在neovim里工作，欢迎参考我的配置：https://github.com/JiaBaoChenT/nvim/nvim/init.vim
 
 ## After Installation, You Need To:
 
@@ -40,200 +232,4 @@ Python:
 
 #### For inputing text ASCII art
 - [ ] Install `figlet`
-
-## Keyboard Shortcuts for `NORMAL` (`COMMAND`) Mode
-### 1 Basic Commands
-#### 1.1 The Most Basics
-**`k`** : to switch to **`INSERT`** : mode, equals to key `i`
-
-**`Q`** : quit current vim window, equals to command `:q`
-
-**`S`** : save the current file, equals to command `:w`
-
-**_IMPORTANT_**
-
-  Since the `i` key has been mapped to `k`, every command (combination) that involves `i` should use `k` instead (for example, `ciw` should be `ckw`).
-
-#### 1.2 Remapped Cursor Movement
-
-| Command    | What it does                                              | Equivalent (QWERTY) |
-|------------|-----------------------------------------------------------|---------------------|
-| `u`        | Cursor up a terminal line                                 | `k`                 |
-| `e`        | Cursor down a terminal line                               | `j`                 |
-| `n`        | Cursor left                                               | `h`                 |
-| `i`        | Cursor right                                              | `l`                 |
-| `U`        | Cursor up 5 terminal lines                                | `5k`                |
-| `E`        | Cursor down 5 terminal lines                              | `5j`                |
-| `N`        | Cursor to the start of the line                           | `0`                 |
-| `I`        | Cursor to the end of the line                             | `$`                 |
-| `Ctrl` `u` | Move the view port up 5 lines without moving the cursor   | `Ctrl` `y`          |
-| `Ctrl` `e` | Move the view port down 5 lines without moving the cursor | `Ctrl` `e`          |
-| `h`        | Move to the end of this word                              | `e`                 |
-
-#### 1.3 Remapped Editor Commands
-| Command | What it does |
-|---------|--------------|
-| `l`     | undo         |
-
-#### 1.4 Some Other Commands to Know
-| Command | What it does                          |
-|---------|---------------------------------------|
-| `<C-i>` | Go to the next cursor position        |
-| `<C-o>` | Go to the previous cursor position    |
-| `<C-a>` | Increase the number under cursor by 1 |
-| `<C-x>` | Decrease the number under cursor by 1 |
-| `z=`    | Show spell suggestions                |
-| `H`     | Joins the current line with the next  |
-| `<`     | Un-indent                             |
-| `>`     | Indent                                |
-
-
-### 2 Window Management
-#### 2.1 Creating Window Through Split Screen
-| Command | What it does                                                                |
-|---------|-----------------------------------------------------------------------------|
-| `su`    | Create a new horizontal split screen and place it above the current window  |
-| `se`    | Create a new horizontal split screen and place it below the current window  |
-| `sn`    | Create a new vertical split screen and place it left to the current window  |
-| `si`    | Create a new vertical split screen and place it right to the current window |
-| `sv`    | Set the two splits to be vertical                                           |
-| `sh`    | Set the two splits to be horizontal                                         |
-| `srv`   | Rotate splits and arrange splits vertically                                 |
-| `srh`   | Rotate splits and arrange splits horizontally
-
-#### 2.2 Moving the Cursor Between Different Windows
-| Shortcut        | Action                         |
-|-----------------|--------------------------------|
-| `<SPACE>` + `w` | Move cursor to the next window |
-| `<SPACE>` + `n` | Move cursor one window left    |
-| `<SPACE>` + `i` | Move cursor one window right   |
-| `<SPACE>` + `u` | Move cursor one window up      |
-| `<SPACE>` + `e` | Move cursor one window down    |
-
-#### 2.3 Resizing Different Windows
-Use the arrow keys to resize the current window.
-
-## Plugins
-#### COC (AutoCompletion)
-| Shortcut    | Action                |
-|-------------|-----------------------|
-| `Space` `y` | Get yank history list |
-| `gd`        | Go to definition      |
-| `gr`        | List references       |
-| `gi`        | List implementation   |
-| `gy`        | Go to type definition |
-
-#### NERDTree
-| Shortcut          | Action          |
-|-------------------|-----------------|
-| `tt`              | Toggle NerdTree |
-| `,` (in NERDTREE) | Toggle menu     |
-
-#### Vista.vim
-Press `T` (`Shift` + `t`) to open function and variable list.
-
-Press `Ctrl` + `T` to open function/class/variable finder
-
-Press `q` to leave Vista.vim
-
-#### FZF (the fuzzy file finder)
-| Shortcut   | Action           |
-|------------|------------------|
-| `Ctrl` `p` | Active FZF       |
-| `Ctrl` `u` | Move up 1 item   |
-| `Ctrl` `e` | Move down 1 item |
-
-#### Undotree
-| Shortcut      | Action        |
-|---------------|---------------|
-| `Shift` + `L` | Open Undotree |
-| `Shift` + `K` | History go up |
-| `Shift` + `J` | History go down |
-
-#### vim-startify (Startup screen)
-Press `Space` `s` `t` to openup `startify`
-
-#### thesaurus_query.vim
-Press `Space` `t` `h` to find synonyms
-
-#### vim-signiture (Bookmarks)
-| Shortcut    | Action                          | Command |
-|-------------|---------------------------------|---------|
-| `m<letter>` | Add/remove mark at current line |         |
-| `m/`        | List all marks                  |         |
-| `m<SPACE>`  | Jump to the next mark in buffer |         |
-
-For more commands, see [here](https://github.com/MattesGroeger/vim-bookmarks#usage)
-
-#### vim-table-mode
-Toggle "Table Editing Mode" with `<SPACE>tm` (equals to command `:TableModeToggle<CR>`)
-
-#### vim-multiple-cursors
-| Shortcut   | Action                              |
-|------------|-------------------------------------|
-| `Ctrl`+`k` | Select next word (multiple cursors) |
-| `Ctrl`+`p` | Select previous word                |
-| `Ctrl`+`x` | Skip word                           |
-| `Esc`      | Quit mutiple cursors                |
-
-#### vim-surround
-To add surround (`string` -> `"string"`):
-```
-string
-```
-press: `yskw'`:
-```
-'string'
-```
-
-To change surround
-```
-'string'
-```
-press: `cs'"`:
-```
-"string"
-```
-
-#### fzf-gitignore
-Press `Space` `g` `i` to create a `.gitignore` file
-
-#### vim-calc
-Press `Space` + `a` to calculate the equation in the current line
-
-## Custom Snippets
-#### Markdown
-| Shortcut | What it creates     |
-|----------|---------------------|
-| `,n`     | ---                 |
-| `,b`     | **Bold** text           |
-| `,s`     | ~~sliced~~ text     |
-| `,i`     | *italic* text         |
-| `,d`     | `code block`        |
-| `,c`     | big `block of code` |
-| `,m`     | - [ ] check mark    |
-| `,p`     | picture             |
-| `,a`     | [link]()            |
-| `,1`     | # H1                |
-| `,2`     | ## H2               |
-| `,3`     | ### H3              |
-| `,4`     | #### H4             |
-| `,l`     | --------            |
-
-`,f` to go to the next `<++>` (placeholder)
-
-`,w` to go to the next `<++>` (placeholder) and then press `Enter` for you
-
-## Other Useful Stuff
-#### Press `<SPACE>fd` to highlight adjacent duplicated words
-
-#### Press `tx` and enter your text
-`tx Hello<Enter>`
-```
- _   _      _ _
-| | | | ___| | | ___
-| |_| |/ _ \ | |/ _ \
-|  _  |  __/ | | (_) |
-|_| |_|\___|_|_|\___/
-```
 

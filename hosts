@@ -1,0 +1,13 @@
+##
+# Host Database
+#
+# localhost is used to configure the loopback interface
+# when the system is booting.  Do not change this entry.
+##
+127.0.0.1	localhost
+255.255.255.255	broadcasthost
+::1             localhost
+#github repo
+199.232.5.194 http://github.global.ssl.fastly.net 
+140.82.113.3 http://github.com
+
