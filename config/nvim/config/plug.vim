@@ -7,9 +7,9 @@
 call plug#begin('~/.config/nvim/config/plugins')
 
 " "{{--------coc
-Plug 'neoclide/coc.nvim', { 'do': './install.sh nightly' }
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'neoclide/coc.nvim', {'do': 'yarn install --frozen-lockfile'}
 " "}}
-
 " "{{--------git
 Plug 'tpope/vim-fugitive'
 Plug 'neoclide/vim-easygit'
@@ -82,7 +82,6 @@ Plug 't9md/vim-choosewin',  { 'on': 'ChooseWin' }
 " Plug 'terryma/vim-smooth-scroll'
 " "Plug 'yuttie/comfortable-motion.vim'
 " " 二进制查看
-Plug 'Shougo/vinarise.vim', { 'on': 'Vinarise' }
 " " 快速移动
 Plug 'easymotion/vim-easymotion'
 " " 多光标
