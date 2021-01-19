@@ -25,7 +25,7 @@ cd "$(brew --repo)/Library/Taps/homebrew/homebrew-cask"
 git remote set-url origin https://mirrors.ustc.edu.cn/homebrew-cask.git：；
 ```
 
-## Startup System Enviorment
+## Startup System Environment
 - [ ] brew install zsh
 - [ ] brew install tmux
 - [ ] brew install fzf
