@@ -11,16 +11,6 @@ Please **DO NOT** just copy this config without really looking at it! Please, at
 ```
 /bin/bash -c "$(curl -fsSL https://gitee.com/cunkai/HomebrewCN/raw/master/Homebrew.sh)"
 ```
-```
-#### 替换国内源
-```
-cd "$(brew --repo)"
-git remote set-url origin https://mirrors.ustc.edu.cn/brew.git
-cd "$(brew --repo)/Library/Taps/homebrew/homebrew-core"
-git remote set-url origin https://mirrors.ustc.edu.cn/homebrew-core.git
-cd "$(brew --repo)/Library/Taps/homebrew/homebrew-cask"
-git remote set-url origin https://mirrors.ustc.edu.cn/homebrew-cask.git：；
-```
 
 ## Startup System Enviorment
 - [ ] brew install zsh
