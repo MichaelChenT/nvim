@@ -10,6 +10,17 @@ Please **DO NOT** just copy this config without really looking at it! Please, at
 #### 安装brew
 ```
 /bin/bash -c "$(curl -fsSL https://gitee.com/cunkai/HomebrewCN/raw/master/Homebrew.sh)"
+
+git config --global --unset http.proxy
+git config --global http.proxy 'http://127.0.0.1:port'
+
+# intel
+git config --global --add safe.directory /usr/local/Homebrew/Library/Taps/homebrew/homebrew-core
+git config --global --add safe.directory /usr/local/Homebrew/Library/Taps/homebrew/homebrew-cask
+
+# m1/m2
+git config --global --add safe.directory /opt/homebrew/Library/Taps/homebrew/homebrew-core
+git config --global --add safe.directory /opt/homebrew/Library/Taps/homebrew/homebrew-cask
 ```
 
 ## Startup System Enviorment
