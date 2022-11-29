@@ -11,9 +11,6 @@ Please **DO NOT** just copy this config without really looking at it! Please, at
 ```
 /bin/bash -c "$(curl -fsSL https://gitee.com/cunkai/HomebrewCN/raw/master/Homebrew.sh)"
 ```
-#### 安装brew cask
-```
-git clone git://mirrors.ustc.edu.cn/homebrew-cask.git//usr/local/Homebrew/Library/Taps/homebrew/homebrew-cask --depth=1
 ```
 #### 替换国内源
 ```
