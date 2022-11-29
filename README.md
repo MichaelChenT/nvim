@@ -9,7 +9,7 @@ Please **DO NOT** just copy this config without really looking at it! Please, at
 
 #### 安装brew
 ```
-git clone git://mirrors.ustc.edu.cn/homebrew-core.git//usr/local/Homebrew/Library/Taps/homebrew/homebrew-core --depth=1
+/bin/bash -c "$(curl -fsSL https://gitee.com/cunkai/HomebrewCN/raw/master/Homebrew.sh)"
 ```
 #### 安装brew cask
 ```
