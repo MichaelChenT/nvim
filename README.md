@@ -23,7 +23,7 @@ git config --global --add safe.directory /opt/homebrew/Library/Taps/homebrew/hom
 git config --global --add safe.directory /opt/homebrew/Library/Taps/homebrew/homebrew-cask
 ```
 
-## Startup System Enviorment
+## Startup System Environment
 - [ ] brew install zsh
 - [ ] brew install tmux
 - [ ] brew install fzf
